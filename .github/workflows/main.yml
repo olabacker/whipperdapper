@@ -1,0 +1,35 @@
+name: Build and Publish NuGet Package
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Build package
+        run: dotnet pack ./src/WhipperDapper/WhipperDapper.csproj --configuration Release
+
+      - name: Create release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: './**/*.nupkg'
+          tag_name: ${{ github.ref }}
+          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish package to NuGet
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push ./bin/Release/*.nupkg --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json
