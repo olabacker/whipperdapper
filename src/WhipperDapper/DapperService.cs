@@ -1,13 +1,23 @@
 ﻿using Dapper.Contrib.Extensions;
 using MySqlConnector;
 using System.Data;
+using System.Linq.Expressions;
+using Dapper;
 
 namespace WhipperDapper;
+
 public class DapperService
 {
     private readonly DapperSettings _dapperSettings;
 
     public DapperService(DapperSettings dapperSettings) => _dapperSettings = dapperSettings;
+
+    private async Task<T> UseConnection<T>(Func<IDbConnection, Task<T>> action)
+    {
+        await using var connection = new MySqlConnection(_dapperSettings.ConnectionString);
+        await connection.OpenAsync();
+        return await action(connection);
+    }
 
     public async Task Query(Action<IDbConnection> action)
     {
@@ -17,60 +27,64 @@ public class DapperService
         action(connection);
     }
 
-    public async Task<IEnumerable<T>> GetWhere<T>(Func<T, bool> func) where T : class, IEntity
+    /// <summary>
+    /// Returns all entities of type T
+    /// If func is not null it will return all entities that match the predicate
+    /// The expression => query builder is pretty bad and only supports basic expressions
+    /// </summary>
+    /// <param name="func">Empty returns all</param>
+    /// <param name="skip">Number of entities to skip</param>
+    /// <param name="limit">Maximum number of results</param>
+    /// <typeparam name="T">Type of entity</typeparam>
+    /// <returns></returns>
+    public Task<IEnumerable<T>> Query<T>(Expression<Func<T, bool>>? func = null, int? skip = null, int? limit = null) where T : class, IEntity
     {
-        var all = await GetAll<T>();
-        return all.Where(func);
-    }
-
-    public async Task<T> GetFirstWhere<T>(Func<T, bool> func) where T : class, IEntity
-    {
-        var where = await GetWhere(func);
-
-        return where.First();
-    }
-
-
-    public async Task<IEnumerable<T>> GetAll<T>() where T : class
-    {
-        await using var connection = new MySqlConnection(_dapperSettings.ConnectionString);
-
-        await connection.OpenAsync();
-
-        return await connection.GetAllAsync<T>();
-    }
-
-
-    public async Task Save<T>(T entity) where T : class, IEntity
-    {
-        await using var connection = new MySqlConnection(_dapperSettings.ConnectionString);
-
-        await connection.OpenAsync();
-
-        if (await Get<T>(entity.Id) is null)
+        if (func is null)
         {
-            await connection.InsertAsync(entity);
-
-            return;
+            return UseConnection(c => c.GetAllAsync<T>());
         }
 
-        await connection.UpdateAsync(entity);
+        var translator = new PredicateQueryTranslator();
+        var whereClause = translator.Translate(func);
+        var table = typeof(T).GetTableName();
+        var query = $"SELECT * FROM {table} WHERE {whereClause}";
+
+        if (skip.HasValue)
+        {
+            query += $" OFFSET {skip.Value}";
+        }
+        
+        if (limit.HasValue)
+        {
+            query += $" LIMIT {limit.Value}";
+        }
+        
+        return UseConnection(c => c.QueryAsync<T>(query));
     }
 
-    public async Task<T> Get<T>(int id) where T : class
+    public async Task<T> QuerySingle<T>(Expression<Func<T, bool>> func) where T : class, IEntity
     {
-        await using var connection = new MySqlConnection(_dapperSettings.ConnectionString);
-
-        await connection.OpenAsync();
-        return await connection.GetAsync<T>(id);
+        var translator = new PredicateQueryTranslator();
+        var whereClause = translator.Translate(func);
+        var table = typeof(T).GetTableName();
+        var query = $"SELECT * FROM {table} WHERE {whereClause} LIMIT 1";
+        var result = await UseConnection(c => c.QueryAsync<T>(query));
+        return result.First();
     }
 
-    public async Task Delete<T>(T entity) where T : class, IEntity
+    public Task<T> Get<T>(int id) where T : class =>
+        UseConnection(c => c.GetAsync<T>(id));
+
+    public Task Save<T>(T entity) where T : class, IEntity
     {
-        await using var connection = new MySqlConnection(_dapperSettings.ConnectionString);
+        if (entity.Id == 0)
+        {
+            return UseConnection(c => c.InsertAsync(entity));
+        }
 
-        await connection.OpenAsync();
-
-        await connection.DeleteAsync(entity);
+        return UseConnection(c => c.UpdateAsync(entity));
     }
+
+    public Task<bool> Delete<T>(T entity) where T : class, IEntity => 
+        UseConnection(c => c.DeleteAsync(entity));
 }

@@ -14,6 +14,15 @@
 		<PackageIcon>icon.png</PackageIcon>
 	</PropertyGroup>
 
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>WhipperDapper.Tests</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<None Include="icon.png" Pack="true" PackagePath="\"/>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Dapper.Contrib" Version="2.0.78" />
