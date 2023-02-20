@@ -1,4 +1,4 @@
-name: Build and Publish NuGet Package
+name: Build and publish NuGet Package
 
 on:
   workflow_dispatch:
@@ -13,15 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
 
       - name: Build package
         run: dotnet pack ./src/WhipperDapper/WhipperDapper.csproj -p:PackageVersion=${{inputs.version}}  --configuration Release
 
       - name: Publish package to NuGet
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: dotnet nuget push ./src/WhipperDapper/bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
