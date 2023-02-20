@@ -1,9 +1,12 @@
 name: Build and Publish NuGet Package
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'nuget version'
+        required: true
+        type: string
 
 jobs:
   build-and-publish:
@@ -18,18 +21,9 @@ jobs:
           dotnet-version: '6.0.x'
 
       - name: Build package
-        run: dotnet pack ./src/WhipperDapper/WhipperDapper.csproj --configuration Release
-
-      - name: Create release
-        id: create_release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: './**/*.nupkg'
-          tag_name: ${{ github.ref }}
-          prerelease: false
-          token: ${{ secrets.GITHUB_TOKEN }}
+        run: dotnet pack ./src/WhipperDapper/WhipperDapper.csproj -p:PackageVersion=${{inputs.version}}  --configuration Release
 
       - name: Publish package to NuGet
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-        run: dotnet nuget push ./bin/Release/*.nupkg --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push ./src/WhipperDapper/bin/Release/*.nupkg --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json
