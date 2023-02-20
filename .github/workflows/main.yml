@@ -17,8 +17,6 @@ jobs:
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.x'
 
       - name: Build package
         run: dotnet pack ./src/WhipperDapper/WhipperDapper.csproj -p:PackageVersion=${{inputs.version}}  --configuration Release
@@ -26,4 +24,4 @@ jobs:
       - name: Publish package to NuGet
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-        run: dotnet nuget push ./src/WhipperDapper/bin/Release/*.nupkg --api-key $NUGET_API_KEY --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push ./src/WhipperDapper/bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
