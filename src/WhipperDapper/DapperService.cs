@@ -26,6 +26,17 @@ public class DapperService
         await connection.OpenAsync();
         action(connection);
     }
+    
+    public async Task CreateTableIfNotExists<T>() where T : class, IEntity
+    {
+        await using var connection = new MySqlConnection(_dapperSettings.ConnectionString);
+        await connection.OpenAsync();
+        
+        var tableGenerator = new TableGenerator();
+        var query = tableGenerator.GenerateCreateQuery<T>();
+
+        await connection.ExecuteAsync(query);
+    }
 
     /// <summary>
     /// Returns all entities of type T

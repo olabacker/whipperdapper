@@ -5,19 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace WhipperDapper.Tests;
 
-public class UnitTest1
+public class PredicateQueryTranslatorTests
 {
-    private IServiceProvider _serviceProvider;
-    
-    public UnitTest1()
-    {
-        var serviceColletion = new ServiceCollection();
-        
-        serviceColletion.AddWhipperDapper("server=192.168.1.101;user=root;password=root;database=whipperdapper");
-        
-        _serviceProvider = serviceColletion.BuildServiceProvider();
-    }
-    
     [Fact]
     public void Test1()
     {

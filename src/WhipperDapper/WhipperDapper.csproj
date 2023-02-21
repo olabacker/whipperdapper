@@ -6,6 +6,7 @@
 		<Nullable>enable</Nullable>
 		<PackageProjectUrl>https://github.com/olabacker/WhipperDapper</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/olabacker/WhipperDapper</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageTags>Dapper</PackageTags>
 		<Description>Small dapper wrapper for the whippersnapper</Description>
 		<Authors>Ola Bäcker</Authors>
@@ -21,7 +22,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<None Include="icon.png" Pack="true" PackagePath="\"/>
+		<None Include="icon.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 	<ItemGroup>
