@@ -15,10 +15,33 @@ public class TableGeneratorTests
         createString.Should().Be("CREATE TABLE IF NOT EXISTS whipper (Id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY (Id))");
     }
     
+    [Fact]
+    public void Test2()
+    {
+        var createString = _tableGenerator.GenerateCreateQuery<WhipperWithEnum>();
+
+        createString.Should().Be("CREATE TABLE IF NOT EXISTS ObjectWithEnum (Id INT NOT NULL AUTO_INCREMENT, Enum INT NOT NULL, TimeHehe DATETIME NULL, PRIMARY KEY (Id))");
+    }
     
     [Table("whipper")]
     private class Whipper : IEntity
     {
         public int Id { get; set; }
+    }
+    
+    public enum WhipperEnum
+    {
+        Lol,
+        Lmao
+    }
+    
+    [Table("ObjectWithEnum")]
+    private class WhipperWithEnum : IEntity
+    {
+        public int Id { get; set; }
+        
+        public WhipperEnum Enum { get; set; }
+        
+        public DateTime? TimeHehe { get; set; }
     }
 }

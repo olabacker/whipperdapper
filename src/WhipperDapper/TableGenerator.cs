@@ -18,10 +18,10 @@ public class TableGenerator
             var columnName = property.Name.ToLower();
             var columnType = GetColumnType(property.PropertyType);
 
-            columns[i] = $"{columnName} {columnType}";
+            columns[i] = $"`{columnName}` {columnType}";
         }
 
-        var createTable = $"CREATE TABLE IF NOT EXISTS {tableName} ({string.Join(", ", columns)} PRIMARY KEY (`Id`) USING BTREE);";
+        var createTable = $"CREATE TABLE IF NOT EXISTS {tableName} ({string.Join(", ", columns)}, PRIMARY KEY (`id`) USING BTREE);";
         return createTable;
     }
 
@@ -30,8 +30,20 @@ public class TableGenerator
         {
             _ when type == typeof(int?) => "INT(11) NULL",
             _ when type == typeof(int) => "INT(11)",
+            _ when type == typeof(long?) => "BIGINT(20) NULL",
+            _ when type == typeof(long) => "BIGINT(20)",
             _ when type == typeof(string) => "VARCHAR(255)",
+            _ when type == typeof(bool?) => "TINYINT(1) NULL",
+            _ when type == typeof(bool) => "TINYINT(1)",
+            _ when type == typeof(double?) => "DOUBLE NULL",
+            _ when type == typeof(double) => "DOUBLE",
+            _ when type == typeof(float?) => "FLOAT NULL",
+            _ when type == typeof(float) => "FLOAT",
+            _ when type == typeof(decimal?) => "DECIMAL NULL",
+            _ when type == typeof(decimal) => "DECIMAL",
+            _ when type == typeof(DateTime?) => "DATETIME NULL",
             _ when type == typeof(DateTime) => "DATETIME",
+            _ when type.IsEnum => "INT(11)",
             _ => throw new ArgumentException($"Unsupported data type {type.Name}")
         };
 }
