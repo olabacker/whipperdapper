@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WhipperDapper", "WhipperDap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhipperDapper.Tests", "..\WhipperDapper.Tests\WhipperDapper.Tests.csproj", "{7B1CA34E-6642-4CAA-AF97-5E171A1112F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhipperDapper.Interfaces", "..\WhipperDapper.Interfaces\WhipperDapper.Interfaces.csproj", "{C1D86A20-3A9E-429F-8CEA-CF844A5499DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{7B1CA34E-6642-4CAA-AF97-5E171A1112F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B1CA34E-6642-4CAA-AF97-5E171A1112F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B1CA34E-6642-4CAA-AF97-5E171A1112F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1D86A20-3A9E-429F-8CEA-CF844A5499DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1D86A20-3A9E-429F-8CEA-CF844A5499DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1D86A20-3A9E-429F-8CEA-CF844A5499DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1D86A20-3A9E-429F-8CEA-CF844A5499DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

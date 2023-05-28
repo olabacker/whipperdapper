@@ -3,6 +3,7 @@ using MySqlConnector;
 using System.Data;
 using System.Linq.Expressions;
 using Dapper;
+using WhipperDapper.Interfaces;
 
 namespace WhipperDapper;
 

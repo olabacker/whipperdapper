@@ -30,4 +30,8 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
 		<PackageReference Include="MySqlConnector" Version="2.2.6" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\WhipperDapper.Interfaces\WhipperDapper.Interfaces.csproj" />
+	</ItemGroup>
 </Project>

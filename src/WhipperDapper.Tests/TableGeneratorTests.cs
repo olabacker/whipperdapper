@@ -1,5 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 using FluentAssertions;
+using WhipperDapper.Interfaces;
 
 namespace WhipperDapper.Tests;
 

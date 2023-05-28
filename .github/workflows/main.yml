@@ -20,6 +20,20 @@ jobs:
 
       - name: Build package
         run: dotnet pack ./src/WhipperDapper/WhipperDapper.csproj -p:PackageVersion=${{inputs.version}}  --configuration Release
+      
+      - name: Publish package to NuGet
+        run: dotnet nuget push ./src/WhipperDapper/bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+  build-and-publish-interfaces:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+
+      - name: Build package
+        run: dotnet pack ./src/WhipperDapper/WhipperDapper.csproj -p:PackageVersion=${{inputs.version}}  --configuration Release
+      
       - name: Publish package to NuGet
         run: dotnet nuget push ./src/WhipperDapper/bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json

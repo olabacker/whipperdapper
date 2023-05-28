@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq.Expressions;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using WhipperDapper.Interfaces;
 
 namespace WhipperDapper.Tests;
 
