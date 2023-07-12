@@ -28,6 +28,7 @@
   </ItemGroup>
 	
   <ItemGroup>
+    <ProjectReference Include="..\WhipperDapper.Interfaces\WhipperDapper.Interfaces.csproj" />
     <ProjectReference Include="..\WhipperDapper\WhipperDapper.csproj" />
   </ItemGroup>
 

@@ -1,37 +1,53 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<PackageProjectUrl>https://github.com/olabacker/WhipperDapper</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/olabacker/WhipperDapper</RepositoryUrl>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageTags>Dapper</PackageTags>
-		<Description>Small dapper wrapper for the whippersnapper</Description>
-		<Authors>Ola Bäcker</Authors>
-		<Owners>olabacker</Owners>
-		<Version>1.0.0</Version>
-		<PackageIcon>icon.png</PackageIcon>
-	</PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <PackageProjectUrl>https://github.com/olabacker/WhipperDapper</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/olabacker/WhipperDapper</RepositoryUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>Dapper</PackageTags>
+        <Description>Small dapper wrapper for the whippersnapper</Description>
+        <Authors>Ola Bäcker</Authors>
+        <Owners>olabacker</Owners>
+        <Version>1.0.0</Version>
+        <PackageIcon>icon.png</PackageIcon>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-			<_Parameter1>WhipperDapper.Tests</_Parameter1>
-		</AssemblyAttribute>
-	</ItemGroup>
-	
-	<ItemGroup>
-		<None Include="icon.png" Pack="true" PackagePath="\" />
-	</ItemGroup>
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>WhipperDapper.Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Dapper.Contrib" Version="2.0.78" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-		<PackageReference Include="MySqlConnector" Version="2.2.6" />
-	</ItemGroup>
+    <ItemGroup>
+        <None Include="icon.png" Pack="true" PackagePath="\"/>
+    </ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\WhipperDapper.Interfaces\WhipperDapper.Interfaces.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Dapper.Contrib" Version="2.0.78"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0"/>
+        <PackageReference Include="MySqlConnector" Version="2.2.6"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\WhipperDapper.Interfaces\WhipperDapper.Interfaces.csproj" PrivateAssets="All"/>
+    </ItemGroup>
+
+    <PropertyGroup>
+        <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
+    </PropertyGroup>
+
+    <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="BuildOnlySettings;ResolveReferences">
+        <ItemGroup>
+            <_ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference')->WithMetadataValue('PrivateAssets', 'All'))"/>
+        </ItemGroup>
+
+        <Message Text="Batch for .nupkg: ReferenceCopyLocalPaths = @(_ReferenceCopyLocalPaths), ReferenceCopyLocalPaths.DestinationSubDirectory = %(_ReferenceCopyLocalPaths.DestinationSubDirectory) Filename = %(_ReferenceCopyLocalPaths.Filename) Extension = %(_ReferenceCopyLocalPaths.Extension)" Importance="High" Condition="'@(_ReferenceCopyLocalPaths)' != ''"/>
+
+        <ItemGroup>
+            <BuildOutputInPackage Include="@(_ReferenceCopyLocalPaths)" TargetPath="%(_ReferenceCopyLocalPaths.DestinationSubDirectory)"/>
+        </ItemGroup>
+    </Target>
 </Project>

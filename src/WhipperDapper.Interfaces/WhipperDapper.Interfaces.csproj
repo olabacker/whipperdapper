@@ -4,6 +4,22 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <PackageProjectUrl>https://github.com/olabacker/WhipperDapper</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/olabacker/WhipperDapper</RepositoryUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>Dapper</PackageTags>
+        <Description>Interfaces needed for whipperdapper</Description>
+        <Authors>Ola Bäcker</Authors>
+        <Owners>olabacker</Owners>
+        <Version>1.0.0</Version>
+        <PackageIcon>icon.png</PackageIcon>
     </PropertyGroup>
+
+    <ItemGroup>
+      <None Update="icon.png">
+        <Pack>true</Pack>
+        <PackagePath>\</PackagePath>
+      </None>
+    </ItemGroup>
 
 </Project>
