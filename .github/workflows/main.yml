@@ -33,7 +33,7 @@ jobs:
         uses: actions/setup-dotnet@v3
 
       - name: Build package
-        run: dotnet pack ./src/WhipperDapper/WhipperDapper.csproj -p:PackageVersion=${{inputs.version}}  --configuration Release
+        run: dotnet pack ./src/WhipperDapper.Interfaces/WhipperDapper.Interfaces.csproj -p:PackageVersion=${{inputs.version}}  --configuration Release
       
       - name: Publish package to NuGet
-        run: dotnet nuget push ./src/WhipperDapper/bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push ./src/WhipperDapper.Interfaces/bin/Release/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
