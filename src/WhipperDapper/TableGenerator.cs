@@ -4,7 +4,7 @@ namespace WhipperDapper;
 
 public class TableGenerator
 {
-    public string GenerateCreateQuery<T>()
+    public static string GenerateCreateQuery<T>()
     {
         var type = typeof(T);
         var tableName = type.GetTableName();
@@ -17,6 +17,11 @@ public class TableGenerator
             var property = properties[i];
             var columnName = property.Name.ToLower();
             var columnType = GetColumnType(property.PropertyType);
+            
+            if(columnName == "id")
+            {
+                columnType = "INT(11) NOT NULL AUTO_INCREMENT";
+            }
 
             columns[i] = $"`{columnName}` {columnType}";
         }

@@ -11,7 +11,7 @@ public class TableGeneratorTests
     [Fact]
     public void Test1()
     {
-        var createString = _tableGenerator.GenerateCreateQuery<Whipper>();
+        var createString = TableGenerator.GenerateCreateQuery<Whipper>();
 
         createString.Should().Be("CREATE TABLE IF NOT EXISTS whipper (Id INT NOT NULL AUTO_INCREMENT, PRIMARY KEY (Id))");
     }
@@ -19,7 +19,7 @@ public class TableGeneratorTests
     [Fact]
     public void Test2()
     {
-        var createString = _tableGenerator.GenerateCreateQuery<WhipperWithEnum>();
+        var createString = TableGenerator.GenerateCreateQuery<WhipperWithEnum>();
 
         createString.Should().Be("CREATE TABLE IF NOT EXISTS ObjectWithEnum (Id INT NOT NULL AUTO_INCREMENT, Enum INT NOT NULL, TimeHehe DATETIME NULL, PRIMARY KEY (Id))");
     }

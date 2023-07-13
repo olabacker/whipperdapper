@@ -23,7 +23,6 @@ public class DapperService
     public async Task Query(Action<IDbConnection> action)
     {
         await using var connection = new MySqlConnection(_dapperSettings.ConnectionString);
-
         await connection.OpenAsync();
         action(connection);
     }
@@ -32,10 +31,7 @@ public class DapperService
     {
         await using var connection = new MySqlConnection(_dapperSettings.ConnectionString);
         await connection.OpenAsync();
-        
-        var tableGenerator = new TableGenerator();
-        var query = tableGenerator.GenerateCreateQuery<T>();
-
+        var query = TableGenerator.GenerateCreateQuery<T>();
         await connection.ExecuteAsync(query);
     }
 
