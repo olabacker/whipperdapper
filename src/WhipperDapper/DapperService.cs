@@ -70,6 +70,12 @@ public class DapperService
         return UseConnection(c => c.QueryAsync<T>(query));
     }
 
+    public async Task<IEnumerable<T>> QueryAll<T>(Func<T, bool> func) where T : class, IEntity
+    {
+        var all = await Query<T>();
+        return all.Where(func);
+    }
+
     public async Task<T> QuerySingle<T>(Expression<Func<T, bool>> func) where T : class, IEntity
     {
         var translator = new PredicateQueryTranslator();
