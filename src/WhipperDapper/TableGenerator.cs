@@ -50,6 +50,13 @@ public class TableGenerator
             _ when type == typeof(DateTime) => "DATETIME",
             _ when type == typeof(byte) => "TINYINT(1)",
             _ when type == typeof(byte?) => "TINYINT(1) NULL",
+            _ when type == typeof(byte[]) => "BLOB",
+            _ when type == typeof(Guid) => "CHAR(36)",
+            _ when type == typeof(Guid?) => "CHAR(36) NULL",
+            _ when type == typeof(TimeSpan) => "TIME",
+            _ when type == typeof(TimeSpan?) => "TIME NULL",
+            _ when type == typeof(ushort) => "INT(11)",
+            _ when type == typeof(ushort?) => "INT(11) NULL",
             _ when type.IsEnum => "INT(11)",
             _ => throw new ArgumentException($"Unsupported data type {type.Name}")
         };
