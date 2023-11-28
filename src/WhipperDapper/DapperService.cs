@@ -86,8 +86,11 @@ public class DapperService
         return result.First();
     }
 
-    public Task<T> Get<T>(int id) where T : class =>
-        UseConnection(c => c.GetAsync<T>(id));
+    public async Task<T?> Get<T>(int id) where T : class
+    {
+        var obj = await UseConnection(c => c.GetAsync<T>(id));
+        return obj;
+    }
 
     public Task Save<T>(T entity) where T : class, IEntity
     {
